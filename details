@@ -1,0 +1,10 @@
+---
+pool: 'default'
+
+trigger:
+  - main
+
+steps:
+  - script: echo "name; hemalatha"
+  - script: echo "study; mtech"
+  
