@@ -1,0 +1,14 @@
+---
+pool:
+  name: 'default'
+
+trigger:
+  - main
+
+jobs:
+- job: preparation_job
+  displayName: install software
+  steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
