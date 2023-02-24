@@ -1,0 +1,8 @@
+---
+pool: 'default'
+
+trigger:
+  - main
+
+steps:
+- script: aws --version

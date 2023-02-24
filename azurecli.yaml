@@ -1,0 +1,11 @@
+---
+pool:
+  name: 'Azure pipelines'
+  vmImage: ubuntu-latest
+
+trigger:
+  - main
+steps:
+- task: AzureCLI@2
+  displayName: Azure CLI
+- script: az --version
