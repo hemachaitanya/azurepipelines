@@ -1,0 +1,10 @@
+---
+pool:
+  name: 'Azure pelines'
+  vmImage: ubuntu-latest
+
+trigger:
+- main
+
+steps:
+- template: /azurepipelines/templet.yaml
