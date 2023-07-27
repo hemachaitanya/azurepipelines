@@ -1,0 +1,47 @@
+pool: 
+  name: Azure Pipelines
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
+- task: CopyFiles@2
+  inputs:
+    Contents: '**/target/*.jar'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'spc'
+    publishLocation: 'Container'
+- task: S3Upload@1
+  inputs:
+    awsCredentials: 'aws'
+    regionName: 'us-east-1'
+    bucketName: 'poorilu'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)'
+    globExpressions: '**'
+    targetFolder: 'https://poorilu.s3.us-east-2.amazonaws.com/$(Build.ArtifactStagingDirectory)'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'hema789 / spring_project'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+- task: ECRPushImage@1
+  inputs:
+    awsCredentials: 'aws'
+    regionName: 'us-east-1'
+    imageSource: 'imagename'
+    sourceImageName: 'spc'
+    repositoryName: 'adp'
+    autoCreateRepository: true
+  
+
+
+   
